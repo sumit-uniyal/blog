@@ -1,0 +1,142 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Index - Django Assignment Bootstrap Template</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css" rel="stylesheet' %}">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+<style>
+  .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1060; /* Keep it above other elements */
+      background-color: rgba(0, 0, 0, 0.9); /* Keep the body background consistent */
+      border-radius: 10px; /* Rounded corners */
+      color: white; /* White text for visibility */
+      padding: 10px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Add some shadow for depth */
+      width: 320px; /* Set width */
+      max-width: 90vw; /* Responsive for smaller screens */
+  }
+
+  /* Toast Header */
+  .toast-header {
+    border-bottom: 2px solid #e67e00;
+    color: white;
+    font-weight: bold;
+  }
+  .bg-transparent {
+    --bs-bg-opacity: 1;
+    background-color: #0000003b !important;
+  }
+  /* Toast Body */
+  .toast-body {
+      font-size: 1rem; /* Standard font size */
+      color: #f1f1f1; /* Softer white for readability */
+      padding: 15px;
+      line-height: 1.5; /* Ensure good readability */
+      border-bottom-left-radius: 10px; /* Match parent's border radius */
+      border-bottom-right-radius: 10px; /* Match parent's border radius */
+  }
+
+  /* Close Button */
+  .btn-close {
+      color: #fff; /* White close button */
+      opacity: 0.8; /* Slightly faded */
+  }
+
+  .btn-close:hover {
+      opacity: 1; /* Fully visible on hover */
+  }
+
+
+</style>
+</head>
+
+<body class="index-page">
+    {% comment %} Toast Messages {% endcomment %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="toast fade
+    {% if message.tags == 'success' %} bg-success
+    {% elif message.tags == 'error' %} bg-danger
+    {% endif %}"
+    role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="1500" data-bs-autohide="true">
+
+    <div class="toast-header">
+        <strong class="me-auto">
+            {% if message.tags == 'success' %} Success
+            {% elif message.tags == 'error' %} Error
+            {% endif %}
+        </strong>
+        <!-- Optional: Remove time display or adjust as per requirement -->
+        <!-- <small>11 mins ago</small> -->
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+
+    <div class="toast-body">
+        {{ message }}
+    </div>
+</div>
+
+    {% endfor %}
+    {% endif %}
+
+    {% comment %} END Toast Messages {% endcomment %}
+    <div id="js-toast-container"></div>
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container position-relative d-flex align-items-center justify-content-between">
+
+      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <h1 class="sitename">Django Assignment</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{% url "home" %}" class="active">Home</a></li>
+          <li>
+            {% if user.is_authenticated %}
+            <li class="dropdown"><a href="#"><span>{{ request.user.first_name }}</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="{% url "logout_user" %}">Sign Out</a></li>
+              </ul>
+            </li>
+            {% else %}
+              <a href="{% url "login_user" %}">Sign In</a>
+            {% endif %}
+          </li>
+          
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+    
+
+    </div>
+  </header>

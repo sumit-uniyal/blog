@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .form-container {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            min-height: 420px;
+        }
+        
+        .form-container .nav-tabs {
+            justify-content: center;
+            border-bottom: 0;
+        }
+        
+        .form-container .nav-link {
+            font-weight: bold;
+            color: #333;
+            padding: 10px 20px;
+        }
+        
+        .form-container .nav-link.active {
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 50px;
+        }
+        
+        .form-group label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .form-control {
+            border-radius: 50px;
+            border: 1px solid #ccc;
+        }
+        
+        .btn-block {
+            border-radius: 50px;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+        }
+        
+        .btn-block:hover {
+            background-color: #0056b3;
+        }
+        
+        .form-text {
+            font-size: 12px;
+            color: #6c757d;
+        }
+        
+        footer {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            width: 100%;
+        }
+        
+        footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 576px) {
+            .form-container {
+                padding: 15px;
+                min-height: auto;
+            }
+            
+            .form-group label {
+                font-size: 12px;
+            }
+            
+            .form-control, .btn-block {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 20px;
+                max-width: 100%;
+            }
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+        .toast {
+            background-color: rgba(0, 0, 0, 0.8); /* Soft, transparent background */
+            border-radius: 8px; /* Rounded corners */
+            color: white; /* White text for better visibility */
+            padding: 10px; /* Add padding for spacing */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Soft shadow */
+            width: 300px; /* Set a width for uniformity */
+        }
+        
+        .toast-header {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: inherit;
+        }
+        
+        .toast-body {
+            font-size: 1rem; /* Set font size */
+            color: white; /* White text */
+        }
+        
+        .close {
+            color: white; /* Close button color */
+            opacity: 0.7;
+        }
+        
+        .close:hover {
+            opacity: 1; /* Brighter close button on hover */
+        }
+        
+    </style>
+</head>
+<body>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="toast fade
+        {% if message.tags == 'success' %} bg-success
+        {% elif message.tags == 'error' %} bg-danger
+        {% endif %}"
+        role="alert" aria-live="assertive" aria-atomic="true" data-delay="1500">
+        
+        <div class="toast-header">
+            {% comment %} <img src="..." class="rounded mr-2" alt="..."> {% endcomment %}
+            <strong class="mr-auto">
+                {% if message.tags == 'success' %} Success
+                {% elif message.tags == 'error' %} Error
+                {% endif %}
+            </strong>
+            {% comment %} <small>11 mins ago</small> {% endcomment %}
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="toast-body">
+            {{ message }}
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+
+
+    <div class="form-container">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Register</a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <!-- Login Form -->
+            <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                <form class="mt-4" action="{% url "login_user" %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="loginEmail">Email address</label>
+                        <input type="text" class="form-control" name="email" id="email" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                    </div>
+                    <small class="form-text text-muted mb-3">By logging in, you agree to our terms and conditions.</small>
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                <form class="mt-4" action="{% url 'register' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="registerName">Name</label>
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Enter Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email address</label>
+                        <input type="email" class="form-control" name="r_email" id="r_email" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" class="form-control" name="r_password" id="r_password" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="registerConfirmPassword">Confirm Password</label>
+                        <input type="password" class="form-control" name="rc_password" id="rc_password" placeholder="Confirm Password">
+                    </div>
+                    <small class="form-text text-muted mb-3">By registering, you agree to our terms and conditions.</small>
+                    <button type="submit" class="btn btn-success btn-block">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> <!-- Full version of jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
+{% if messages %}
+    <script>
+        $(document).ready(function(){
+            $('.toast').toast('show');
+        });
+    </script>
+{% endif %}
